@@ -18,7 +18,7 @@ const Searcher = ({ searchChange, az, za, onGenderChange }) => {
         onChange={searchChange}
       />
       <select
-        onChange={(e) => onGenderChange(e.target.value)}
+        onChange={onGenderChange}
         className="pa2 mb2 ml3"
       >
         <option value="">All Genders</option>
