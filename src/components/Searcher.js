@@ -1,9 +1,9 @@
 import { BiSortAZ, BiSortZA } from "react-icons/bi";
 
-const Searcher = ({ searchChange, az, za }) => {
+const Searcher = ({ searchChange, az, za, onGenderChange }) => {
   return (
-    <div className="pa2 bg-lightest-blue">
-      <div className="absolute f1 ml3">
+    <div className="pa2 bg-lightest-blue flex justify-center items-center">
+      <div className="mr3  f1 ml3">
         <a href="#0" title="Ascending order" onClick={az}>
           <BiSortAZ />
         </a>
@@ -17,6 +17,15 @@ const Searcher = ({ searchChange, az, za }) => {
         placeholder="search contacts"
         onChange={searchChange}
       />
+      <select
+        onChange={(e) => onGenderChange(e.target.value)}
+        className="pa2 mb2 ml3"
+      >
+        <option value="">All Genders</option>
+        <option value="male">Male</option>
+        <option value="female">Female</option>
+        <option value="other">Other</option>
+      </select>
     </div>
   );
 };

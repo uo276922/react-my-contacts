@@ -14,13 +14,20 @@ function App() {
   }, []);
 
   const [searchField, setSearchField] = useState("");
+  const [genderFilter, setGenderFilter] = useState("");
   const onSearchChange = (event) => {
     setSearchField(event.target.value);
   };
+  const onGenderChange = (event) => {
+    setGenderFilter(event.target.value);
+  };
   const searchedContacts = contacts.filter((contact) => {
-    return (contact.name["first"] + " " + contact.name["last"])
-      .toLowerCase()
-      .includes(searchField.toLowerCase());
+    return (
+      (contact.name["first"] + " " + contact.name["last"])
+        .toLowerCase()
+        .includes(searchField.toLowerCase()) &&
+      (genderFilter === "" || contact.gender === genderFilter)
+    );
   });
 
   const onAZ = () => {
@@ -39,7 +46,18 @@ function App() {
     });
     setContacts([...za]); //clone the list
   };
-
+  const exportContacts = () => {
+    const jsonContacts = JSON.stringify(contacts);
+    const blob = new Blob([jsonContacts], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "contacts.json";
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  };
   return (
     <div className="tc ">
       <header>
@@ -49,7 +67,18 @@ function App() {
         <h2 className="f2">Loading...</h2>
       ) : (
         <ErrorBoundary FallbackComponent={ErrorFallback}>
-          <Searcher searchChange={onSearchChange} az={onAZ} za={onZA} />
+          <Searcher
+            searchChange={onSearchChange}
+            az={onAZ}
+            za={onZA}
+            onGenderChange={onGenderChange}
+          />
+          <button
+            onClick={exportContacts}
+            className="pa3 bg-light-blue white br3 mb3"
+          >
+            Export Contacts as JSON
+          </button>
           <Scroll>
             <CardList contacts={searchedContacts} />
           </Scroll>
